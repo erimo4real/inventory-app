@@ -60,8 +60,8 @@ const Analytics = () => {
               />
             </Card>
 
-            <UpgradeCard />
-            <Campaigns />
+            {/* <UpgradeCard />
+            <Campaigns /> */}
           </Grid>
         </Grid>
       </ContentBox>

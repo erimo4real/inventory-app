@@ -24,9 +24,9 @@ const Brand = ({ children }) => {
   return (
     <BrandRoot>
       <Box display="flex" alignItems="center">
-        <MatxLogo />
+        <img width="30%" alt="Logo" src="/assets/images/illustrations/stoke2.png" />
         <StyledSpan mode={mode} className="sidenavHoverShow">
-          Matx
+          STORE APP
         </StyledSpan>
       </Box>
 
