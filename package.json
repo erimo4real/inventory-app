@@ -1,0 +1,34 @@
+{
+  "name": "inventory-app",
+  "version": "1.0.0",
+  "description": "MERN STACK APP FOR TAKEN STOKE ",
+  "main": "backend/server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js"
+  },
+  "keywords": [
+    "MERN",
+    "STACK"
+  ],
+  "author": "erimo",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cloudinary": "^1.37.0",
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.1.4",
+    "express": "^4.18.2",
+    "express-fileupload": "^1.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.2.2",
+    "nodemailer": "^6.9.3",
+    "stripe": "^12.8.0",
+    "validator": "^13.9.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
