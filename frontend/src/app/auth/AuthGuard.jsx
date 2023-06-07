@@ -2,12 +2,14 @@ import useAuth from 'app/hooks/useAuth';
 import { Navigate, useLocation } from 'react-router-dom';
 
 const AuthGuard = ({ children }) => {
-  const { isAuthenticated } = useAuth();
-  const { pathname } = useLocation();
+  // const { isAuthenticated } = useAuth();
+  // const { pathname } = useLocation();
 
-  if (isAuthenticated) return <>{children}</>;
+  // if (isAuthenticated) return <>{children}</>;
 
-  return <Navigate replace to="/session/signin" state={{ from: pathname }} />;
+  // return <Navigate replace to="/session/signin" state={{ from: pathname }} />;
+
+  return <>{children}</>;
 };
 
 export default AuthGuard;
