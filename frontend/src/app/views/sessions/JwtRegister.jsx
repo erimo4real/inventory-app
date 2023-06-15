@@ -3,11 +3,16 @@ import { LoadingButton } from '@mui/lab';
 import { Card, Checkbox, Grid, TextField } from '@mui/material';
 import { Box, styled } from '@mui/material';
 import { Paragraph } from 'app/components/Typography';
-import useAuth from 'app/hooks/useAuth';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useEffect , useState} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from "react-redux";
+import { clearErrors, register } from "../../actions/userAction";
+import ErrorSnackbar from "../material-kit/utility-kit/snackbar/ErrorSnackbar"
+import SucessSnackbar from "../material-kit/utility-kit/snackbar/SucessSnackbar"
+// import  PositionedSnackbar from  "../material-kit/snackbar/PositionedSnackbar";
+
 
 const FlexBox = styled(Box)(() => ({ display: 'flex', alignItems: 'center' }));
 
@@ -36,6 +41,7 @@ const JWTRegister = styled(JustifyBox)(() => ({
 const initialValues = {
   email: '',
   password: '',
+  confirmPwd: '',
   username: '',
   remember: true
 };
@@ -45,33 +51,70 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
     .min(6, 'Password must be 6 character length')
     .required('Password is required!'),
+    confirmPwd: Yup.string()
+    .required('confirm Password is mendatory')
+    .oneOf([Yup.ref('password')], 'Passwords does not match'),
+  username: Yup.string().required('username is required!'),
   email: Yup.string().email('Invalid Email address').required('Email is required!')
 });
 
 const JwtRegister = () => {
+
+  const dispatch = useDispatch();
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarright, setSnackbarright] = useState(false);
+  const [snackbarerror, setSnackbarError] = useState("");
+  const [snackbarsucess, setSnackbarSucess] = useState("");
+  const { error, loading, isRegisterd } = useSelector(
+    (state) => state.user
+  );
+
   const theme = useTheme();
-  const { register } = useAuth();
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
+ 
+  const navigate = useNavigate(); 
+ 
   const handleFormSubmit = (values) => {
-    setLoading(true);
-
-    try {
-      register(values.email, values.username, values.password);
-      navigate('/');
-      setLoading(false);
-    } catch (e) {
-      console.log(e);
-      setLoading(false);
-    }
+   
+    const myForm = {
+      "name": values.username,
+      "email": values.email,
+       "password" : values.password
+    }    
+      dispatch(register(myForm));  
+      values.username = "";
+      values.email = ""; 
+      values.password = ""; 
+      values.confirmPwd = "";    
   };
+
+  useEffect(() => {
+    if (error) {
+      setSnackbar(true);
+      setSnackbarError(error);
+      dispatch(clearErrors());
+      setInterval(function() {
+        window.location.reload();
+      } , 7000);
+    }
+
+    if (isRegisterd) {
+      setSnackbarright(true)
+      setSnackbarSucess("USER REGISTERED SUCCESSFULLY !!!!")
+      setInterval(function() {
+          navigate('/session/signin');
+        } , 5000)
+      // history.push(redirect);
+    }
+  }, [dispatch, error, isRegisterd, navigate]);
+
 
   return (
     <JWTRegister>
       <Card className="card">
         <Grid container>
           <Grid item sm={6} xs={12}>
+          {  snackbar ?  <ErrorSnackbar snackbarerror={snackbarerror} /> : "" }
+          {  snackbarright ?  <SucessSnackbar snackbarsucess={snackbarsucess} /> : "" }
             <ContentBox>
               <img
                 width="100%"
@@ -131,6 +174,20 @@ const JwtRegister = () => {
                       onChange={handleChange}
                       helperText={touched.password && errors.password}
                       error={Boolean(errors.password && touched.password)}
+                      sx={{ mb: 2 }}
+                    />
+                      <TextField
+                      fullWidth
+                      size="small"
+                      name="confirmPwd"
+                      type="password"
+                      label="confirm Password"
+                      variant="outlined"
+                      onBlur={handleBlur}
+                      value={values.confirmPwd}
+                      onChange={handleChange}
+                      helperText={touched.confirmPwd && errors.confirmPwd}
+                      error={Boolean(errors.confirmPwd && touched.confirmPwd)}
                       sx={{ mb: 2 }}
                     />
 
