@@ -4,9 +4,13 @@ import { Box, styled, useTheme } from '@mui/material';
 import { Paragraph } from 'app/components/Typography';
 import useAuth from 'app/hooks/useAuth';
 import { Formik } from 'formik';
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from "react-redux";
+import { clearErrors, login } from "../../actions/userAction";
+import ErrorSnackbar from "../material-kit/utility-kit/snackbar/ErrorSnackbar"
+import SucessSnackbar from "../material-kit/utility-kit/snackbar/SucessSnackbar"
 
 const FlexBox = styled(Box)(() => ({ display: 'flex', alignItems: 'center' }));
 
@@ -34,8 +38,8 @@ const JWTRoot = styled(JustifyBox)(() => ({
 
 // inital login credentials
 const initialValues = {
-  email: 'jason@ui-lib.com',
-  password: 'dummyPass',
+  email: '',
+  password: '',
   remember: true
 };
 
@@ -48,26 +52,46 @@ const validationSchema = Yup.object().shape({
 });
 
 const JwtLogin = () => {
+  const dispatch = useDispatch();
+
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarright, setSnackbarright] = useState(false);
+  const [snackbarerror, setSnackbarError] = useState("");
+
+  const { error, loading, isAuthenticated } = useSelector(
+    (state) => state.user
+  );
+
   const theme = useTheme();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-
-  const { login } = useAuth();
 
   const handleFormSubmit = async (values) => {
-    setLoading(true);
-    try {
-      await login(values.email, values.password);
-      navigate('/');
-    } catch (e) {
-      setLoading(false);
-    }
+   
+     dispatch(login(values.email, values.password));
+
+     values.email = ""; 
+     values.password = ""; 
+
   };
+  
+  useEffect(() => {
+    if (error) {
+      setSnackbar(true);
+      setSnackbarError(error);
+     dispatch(clearErrors());
+   }
+
+   if (isAuthenticated) {
+     //  history.push(redirect);
+      navigate('/dashboard/default');
+   }
+ }, [dispatch, error , isAuthenticated , navigate]);
 
   return (
     <JWTRoot>
       <Card className="card">
         <Grid container>
+        {  snackbar ?  <ErrorSnackbar snackbarerror={snackbarerror} /> : "" }
           <Grid item sm={6} xs={12}>
             <JustifyBox p={4} height="100%" sx={{ minWidth: 320 }}>
               <img src="/assets/images/illustrations/dreamer.svg" width="100%" alt="" />
