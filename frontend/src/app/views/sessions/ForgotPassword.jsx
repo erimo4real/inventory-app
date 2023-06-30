@@ -1,6 +1,12 @@
+import { LoadingButton } from '@mui/lab';
 import { Box, Button, Card, Grid, styled, TextField } from '@mui/material';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useDispatch, useSelector } from "react-redux";
+import { clearErrors, forgotPassword } from "../../actions/userAction";
+import ErrorSnackbar from "../material-kit/utility-kit/snackbar/ErrorSnackbar"
+import SucessSnackbar from "../material-kit/utility-kit/snackbar/SucessSnackbar"
 
 const FlexBox = styled(Box)(() => ({
   display: 'flex',
@@ -27,17 +33,54 @@ const ForgotPasswordRoot = styled(JustifyBox)(() => ({
 }));
 
 const ForgotPassword = () => {
-  const navigate = useNavigate();
-  const [email, setEmail] = useState('admin@example.com');
+  const dispatch = useDispatch();
 
-  const handleFormSubmit = () => {
-    console.log(email);
+  const { error, message, loading } = useSelector(
+    (state) => state.forgotPassword
+  );
+
+  const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [snackbar, setSnackbar] = useState(false);
+  const [snackbarerror, setSnackbarError] = useState("");
+  const [snackbarsucess, setSnackbarSucess] = useState("");
+  const [snackbarright, setSnackbarright] = useState(false);
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+     const myForm = new FormData();
+     myForm.set("email", email);
+      // Display the key/value pairs
+      // for (var pair of myForm.entries()) {
+      //   console.log(pair[0]+ ', ' + pair[1]); 
+      // }
+     dispatch(forgotPassword(myForm));
   };
+
+  useEffect(() => {
+    if (error) {
+       setSnackbar(true);
+       setSnackbarError(error);
+      dispatch(clearErrors());
+      setInterval(function() {
+        window.location.reload();
+      } , 20000);
+    }
+
+    if (message) {
+      setSnackbarright(true)
+      setSnackbarSucess(message)
+     // alert(message);
+    }
+  }, [dispatch, error, message]);
+
 
   return (
     <ForgotPasswordRoot>
       <Card className="card">
         <Grid container>
+        {  snackbar ?  <ErrorSnackbar snackbarerror={snackbarerror} /> : "" }
+        {  snackbarright ?  <SucessSnackbar snackbarsucess={snackbarsucess} /> : "" }
           <Grid item xs={12}>
             <JustifyBox p={4}>
               <img width="300" src="/assets/images/illustrations/dreamer.svg" alt="" />
@@ -47,6 +90,7 @@ const ForgotPassword = () => {
               <form onSubmit={handleFormSubmit}>
                 <TextField
                   type="email"
+                  required
                   name="email"
                   size="small"
                   label="Email"
@@ -56,9 +100,16 @@ const ForgotPassword = () => {
                   sx={{ mb: 3, width: '100%' }}
                 />
 
-                <Button fullWidth variant="contained" color="primary" type="submit">
-                  Reset Password
-                </Button>
+                    <LoadingButton
+                      fullWidth
+                      type="submit"
+                      color="primary"
+                      loading={loading}
+                      variant="contained"
+                      sx={{ my: 2 }}
+                    >
+                      Reset Password
+                    </LoadingButton>
 
                 <Button
                   fullWidth

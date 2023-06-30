@@ -11,6 +11,8 @@ const NotFound = Loadable(lazy(() => import('app/views/sessions/NotFound')));
 const JwtLogin = Loadable(lazy(() => import('app/views/sessions/JwtLogin')));
 const JwtRegister = Loadable(lazy(() => import('app/views/sessions/JwtRegister')));
 const ForgotPassword = Loadable(lazy(() => import('app/views/sessions/ForgotPassword')));
+const ResetPassword = Loadable(lazy(() => import('app/views/sessions/ResetPassword')));
+const UpdatePassword = Loadable(lazy(() => import('app/views/sessions/UpdatePassword')));
 
 // echart page
 const AppEchart = Loadable(lazy(() => import('app/views/charts/echarts/AppEchart')));
@@ -48,6 +50,9 @@ const routes = [
   { path: '/session/signin', element: <JwtLogin /> },
   { path: '/session/signup', element: <JwtRegister /> },
   { path: '/session/forgot-password', element: <ForgotPassword /> },
+  { path: '/session/update-password', element: <UpdatePassword /> },
+  { path: '/session/reset-password/:token', element: <ResetPassword /> },
+  { path: '/password/reset/:token' , element: <ResetPassword />},
 
   { path: '/', element: <Navigate to="dashboard/default" /> },
   { path: '*', element: <NotFound /> }

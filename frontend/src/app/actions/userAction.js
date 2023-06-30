@@ -135,7 +135,7 @@ export const updatePassword = (passwords) => async (dispatch) => {
       passwords,
       config
     );
-
+     
     dispatch({ type: UPDATE_PASSWORD_SUCCESS, payload: data.success });
   } catch (error) {
     dispatch({
@@ -152,24 +152,14 @@ export const forgotPassword = (email) => async (dispatch) => {
 
     const config = { headers: { "Content-Type": "application/json" } };
 
-    const { data } = await axios.post(`/api/v1/password/forgot`, email, config);
+     const { data } = await axios.post(`/api/v1/password/forgot`, email, config);
 
-    dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message });
+     dispatch({ type: FORGOT_PASSWORD_SUCCESS, payload: data.message });
   } catch (error) {
-    console.log(error);
-    error.code = true
-      ? dispatch({
-          type: FORGOT_PASSWORD_FAIL,
-          payload: error.message,
-        })
-      : dispatch({
-          type: FORGOT_PASSWORD_FAIL,
-          payload: error.response.data.message,
-        });
-    // dispatch({
-    //   type: FORGOT_PASSWORD_FAIL,
-    //   payload: error.response.data.message,
-    // });
+    dispatch({
+      type: FORGOT_PASSWORD_FAIL,
+      payload: error.response.data.message,
+    });
   }
 };
 
