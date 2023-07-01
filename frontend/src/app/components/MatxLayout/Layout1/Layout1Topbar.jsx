@@ -15,10 +15,10 @@ import {
 import { MatxMenu, MatxSearchBox } from 'app/components';
 import { themeShadows } from 'app/components/MatxTheme/themeColors';
 import { NotificationProvider } from 'app/contexts/NotificationContext';
-import useAuth from 'app/hooks/useAuth';
 import useSettings from 'app/hooks/useSettings';
 import { topBarHeight } from 'app/utils/constant';
-
+import { useSelector , useDispatch } from "react-redux";
+import { logout } from 'app/actions/userAction';
 import { Span } from '../../Typography';
 import NotificationBar from '../../NotificationBar/NotificationBar';
 import ShoppingCart from '../../ShoppingCart';
@@ -84,12 +84,15 @@ const IconBox = styled('div')(({ theme }) => ({
 const Layout1Topbar = () => {
   const theme = useTheme();
   const { settings, updateSettings } = useSettings();
-  const { logout, user } = useAuth();
   const isMdScreen = useMediaQuery(theme.breakpoints.down('md'));
-
   const updateSidebarMode = (sidebarSettings) => {
     updateSettings({ layout1Settings: { leftSidebar: { ...sidebarSettings } } });
   };
+
+  const dispatch = useDispatch();
+  const { user } = useSelector(
+    (state) => state.user
+   );
 
   const handleSidebarToggle = () => {
     let { layout1Settings } = settings;
@@ -100,6 +103,10 @@ const Layout1Topbar = () => {
       mode = layout1Settings.leftSidebar.mode === 'full' ? 'close' : 'full';
     }
     updateSidebarMode({ mode });
+  };
+
+  const logout1 = () =>{
+    dispatch(logout());
   };
 
   return (
@@ -131,25 +138,27 @@ const Layout1Topbar = () => {
             }
           >
             <StyledItem>
-              <Link to="/">
+              <Link to="/dashboard/default">
                 <Icon> home </Icon>
                 <Span> Home </Span>
               </Link>
             </StyledItem>
 
             <StyledItem>
-              <Link to="/page-layouts/user-profile">
+              <Link to="/material/profile">
                 <Icon> person </Icon>
                 <Span> Profile </Span>
               </Link>
             </StyledItem>
 
             <StyledItem>
+            <Link to="/material/updateProfile">
               <Icon> settings </Icon>
               <Span> Settings </Span>
+              </Link>
             </StyledItem>
 
-            <StyledItem onClick={logout}>
+            <StyledItem onClick={logout1}>
               <Icon> power_settings_new </Icon>
               <Span> Logout </Span>
             </StyledItem>

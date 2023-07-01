@@ -7,6 +7,8 @@ import StatCards from './shared/StatCards';
 import StatCards2 from './shared/StatCards2';
 import TopSellingTable from './shared/TopSellingTable';
 import UpgradeCard from './shared/UpgradeCard';
+import SimpleTable from "./../material-kit/tables/SimpleTable";
+
 
 const ContentBox = styled('div')(({ theme }) => ({
   margin: '30px',
@@ -42,11 +44,13 @@ const Analytics = () => {
         <Grid container spacing={3}>
           <Grid item lg={8} md={8} sm={12} xs={12}>
             <StatCards />
-            <TopSellingTable />
+            {/* <TopSellingTable /> */}
             <StatCards2 />
+            
+            {/* <H4>Ongoing Projects</H4>
+            <RowCards /> */}
 
-            <H4>Ongoing Projects</H4>
-            <RowCards />
+            <SimpleTable/>
           </Grid>
 
           <Grid item lg={4} md={4} sm={12} xs={12}>

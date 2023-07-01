@@ -71,11 +71,11 @@ const SimpleTable = () => {
       <StyledTable>
         <TableHead>
           <TableRow>
-            <TableCell align="left">Name</TableCell>
-            <TableCell align="center">Company</TableCell>
-            <TableCell align="center">Start Date</TableCell>
+            <TableCell align="left">First Name</TableCell>
+            <TableCell align="center">Last Name</TableCell>
+            <TableCell align="center">Email</TableCell>
             <TableCell align="center">Status</TableCell>
-            <TableCell align="center">Amount</TableCell>
+            <TableCell align="center">Start Date</TableCell>
             <TableCell align="right">Action</TableCell>
           </TableRow>
         </TableHead>
