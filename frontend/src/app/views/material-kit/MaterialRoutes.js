@@ -15,6 +15,11 @@ const AppDialog = Loadable(lazy(() => import('./dialog/AppDialog')));
 const AppSnackbar = Loadable(lazy(() => import('./snackbar/AppSnackbar')));
 const AppAutoComplete = Loadable(lazy(() => import('./auto-complete/AppAutoComplete')));
 const AppExpansionPanel = Loadable(lazy(() => import('./expansion-panel/AppExpansionPanel')));
+const Profile = Loadable(lazy(() => import('../sessions/profile/Profile')));
+const ProfileUpdate = Loadable(lazy(() => import('../sessions/profile/UpdateProfile')));
+const UserPage = Loadable(lazy(() => import('../User/User')));
+const VendorPage = Loadable(lazy(() => import('../Vendor/Vendors')));
+const MaterialStatus = Loadable(lazy(() => import('../Materials-Status/Materials-Status')));
 
 const materialRoutes = [
   { path: '/material/table', element: <AppTable /> },
@@ -30,7 +35,12 @@ const materialRoutes = [
   { path: '/material/autocomplete', element: <AppAutoComplete /> },
   { path: '/material/expansion-panel', element: <AppExpansionPanel /> },
   { path: '/material/dialog', element: <AppDialog /> },
-  { path: '/material/snackbar', element: <AppSnackbar /> }
+  { path: '/material/snackbar', element: <AppSnackbar /> },
+  { path: '/material/profile', element: <Profile /> },
+  { path: '/material/updateprofile', element: <ProfileUpdate /> },
+  { path: '/material/UserPage', element: <UserPage /> },
+  { path: '/material/VendorPage', element: <VendorPage /> },
+  { path: '/material/MaterialStatus', element: <MaterialStatus /> }
 ];
 
 export default materialRoutes;

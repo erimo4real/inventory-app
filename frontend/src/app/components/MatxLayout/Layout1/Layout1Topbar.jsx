@@ -152,7 +152,7 @@ const Layout1Topbar = () => {
             </StyledItem>
 
             <StyledItem>
-            <Link to="/material/updateProfile">
+            <Link to="/material/updateprofile">
               <Icon> settings </Icon>
               <Span> Settings </Span>
               </Link>

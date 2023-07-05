@@ -40,7 +40,7 @@ const Footer = () => {
         <AppFooter>
           <FooterContent>
               <Button variant="contained" color="secondary">
-                Get MatX Pro
+                INVENTORY APP
               </Button>
             <Span sx={{ m: 'auto' }}></Span>
             <Paragraph sx={{ m: 0 }}>

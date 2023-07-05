@@ -13,6 +13,8 @@ const JwtRegister = Loadable(lazy(() => import('app/views/sessions/JwtRegister')
 const ForgotPassword = Loadable(lazy(() => import('app/views/sessions/ForgotPassword')));
 const ResetPassword = Loadable(lazy(() => import('app/views/sessions/ResetPassword')));
 const UpdatePassword = Loadable(lazy(() => import('app/views/sessions/UpdatePassword')));
+const Profile = Loadable(lazy(() => import('app/views/sessions/profile/Profile')));
+const UpdateProfile = Loadable(lazy(() => import('app/views/sessions/profile/UpdateProfile')));
 
 // echart page
 const AppEchart = Loadable(lazy(() => import('app/views/charts/echarts/AppEchart')));
@@ -50,6 +52,8 @@ const routes = [
   { path: '/session/signin', element: <JwtLogin /> },
   { path: '/session/signup', element: <JwtRegister /> },
   { path: '/session/forgot-password', element: <ForgotPassword /> },
+  { path: '/session/profile/profile', element: <Profile /> },
+  { path: '/session/profile/updateprofile', element: <UpdateProfile /> },
   { path: '/session/update-password', element: <UpdatePassword /> },
   { path: '/session/reset-password/:token', element: <ResetPassword /> },
   { path: '/password/reset/:token' , element: <ResetPassword />},
