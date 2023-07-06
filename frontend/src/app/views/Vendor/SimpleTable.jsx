@@ -5,7 +5,7 @@ import MuiDialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
-import { forwardRef, useState } from 'react';
+import { forwardRef, useState ,useEffect } from 'react';
 import { useTheme } from '@mui/material';
 import List from '@mui/material/List';
 import Dialog from '@mui/material/Dialog';
@@ -25,8 +25,17 @@ import {
   TableCell,
   TableHead,
   TableRow,
-   Container, Stack, Typography, Unstable_Grid2 as Grid
+   Container, Stack, Typography, Unstable_Grid2 as Grid,
+  Checkbox,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
+import { DatePicker } from "@mui/lab";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import { Span } from "app/components/Typography";
+import { TextValidator, ValidatorForm } from "react-material-ui-form-validator";
 import VendorsDetails from "./Vendors-account/VendorsDetails"
 import VendorProfile from "./Vendors-account/VendorProfile"
 
@@ -75,6 +84,11 @@ const DialogContent = styled(MuiDialogContent)(({ theme }) => ({
 
 const DialogActions = styled(MuiDialogActions)(({ theme }) => ({
   '&.root': { margin: 0, padding: theme.spacing(1) }
+}));
+
+const TextField = styled(TextValidator)(() => ({
+  width: "100%",
+  marginBottom: "16px",
 }));
 
 const subscribarList = [
@@ -130,12 +144,45 @@ const SimpleTable = () => {
   const handleClose = () => setOpen(false);
   const handleClickOpen = () => setOpen(true);
 
-  // for customizedcialog scren
+  // for customizedcialog screen
   const [opencustomizedcialog, setOpencustomizedcialog] = useState(false);
 
   const handleClickOpencustomizedcialog = () => setOpencustomizedcialog(true);
 
   const handleClosecustomizedcialog = () => setOpencustomizedcialog(false);
+// for the form 
+const [state, setState] = useState({ date: new Date() });
+
+  useEffect(() => {
+    ValidatorForm.addValidationRule("isPasswordMatch", (value) => {
+      if (value !== state.password) return false;
+
+      return true;
+    });
+    return () => ValidatorForm.removeValidationRule("isPasswordMatch");
+  }, [state.password]);
+
+  const handleSubmit = (event) => {
+    // console.log("submitted");
+    // console.log(event);
+  };
+
+  const handleChange = (event) => {
+    event.persist();
+    setState({ ...state, [event.target.name]: event.target.value });
+  };
+
+  const handleDateChange = (date) => setState({ ...state, date });
+
+  const {
+    firstName,
+    lastName,
+    mobile,
+    gender,
+    date,
+    company,
+    email,
+  } = state;
 
   return (
       <>
@@ -178,10 +225,16 @@ const SimpleTable = () => {
     </Box>
     <Box>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
-        <AppBar sx={{ position: 'relative' }}>
+      <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="Close">
+              <CloseIcon />
+            </IconButton>
+
+            <H6 sx={{ flex: 1, marginLeft: theme.spacing(2) }}>Sound</H6>
+
             <Button color="inherit" onClick={handleClose}>
-              close
+              CLOSE
             </Button>
           </Toolbar>
         </AppBar>
@@ -230,25 +283,113 @@ const SimpleTable = () => {
     <div>
       <Dialog onClose={handleClosecustomizedcialog} aria-labelledby="customized-dialog-title" open={opencustomizedcialog}>
         <DialogTitle id="customized-dialog-title" >
-          Modal title
+          Edit Vendor
         </DialogTitle>
 
         <DialogContent dividers>
-          <Typography gutterBottom>
-            Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis
-            in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.
-          </Typography>
+        <div>
+      <ValidatorForm onSubmit={handleSubmit} onError={() => null}>
+        <Grid container spacing={6}>
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+            <TextField
+              type="text"
+              name="firstName"
+              id="standard-basic"
+              value={firstName || ""}
+              onChange={handleChange}
+              errorMessages={["this field is required"]}
+              label="first Name (Min length 4, Max length 9)"
+              validators={["required", "minStringLength: 4", "maxStringLength: 9"]}
+            />
 
-          <Typography gutterBottom>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis
-            lacus vel augue laoreet rutrum faucibus dolor auctor.
-          </Typography>
+            <TextField
+              type="text"
+              name="lastName"
+              label="Last Name"
+              onChange={handleChange}
+              value={lastName || ""}
+              validators={["required"]}
+              errorMessages={["this field is required"]}
+            />
 
-          <Typography gutterBottom>
-            Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel
-            scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus
-            auctor fringilla.
-          </Typography>
+            <TextField
+              type="email"
+              name="email"
+              label="Email"
+              value={email || ""}
+              onChange={handleChange}
+              validators={["required", "isEmail"]}
+              errorMessages={["this field is required", "email is not valid"]}
+            />
+
+            <LocalizationProvider dateAdapter={AdapterDateFns}>
+              <DatePicker
+                value={date}
+                onChange={handleDateChange}
+                renderInput={(props) => (
+                  <TextField
+                    {...props}
+                    label="Date picker"
+                    id="mui-pickers-date"
+                    sx={{ mb: 2, width: "100%" }}
+                  />
+                )}
+              />
+            </LocalizationProvider>
+
+            <TextField
+              sx={{ mb: 4 }}
+              type="number"
+              name="company"
+              label="Company Name"
+              onChange={handleChange}
+              value={company || ""}
+              errorMessages={["this field is required"]}
+              validators={["required", "minStringLength:16", "maxStringLength: 16"]}
+            />
+          </Grid>
+
+          <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
+            <TextField
+              type="text"
+              name="mobile"
+              value={mobile || ""}
+              label="Mobile Nubmer"
+              onChange={handleChange}
+              validators={["required"]}
+              errorMessages={["this field is required"]}
+            />
+          
+            <RadioGroup
+              row
+              name="gender"
+              sx={{ mb: 2 }}
+              value={gender || ""}
+              onChange={handleChange}
+            >
+              <FormControlLabel
+                value="Male"
+                label="Male"
+                labelPlacement="end"
+                control={<Radio color="secondary" />}
+              />
+
+              <FormControlLabel
+                value="Female"
+                label="Female"
+                labelPlacement="end"
+                control={<Radio color="secondary" />}
+              />
+            </RadioGroup>
+          </Grid>
+        </Grid>
+
+        <Button color="primary" variant="contained" type="submit">
+          <Icon>send</Icon>
+          <Span sx={{ pl: 1, textTransform: "capitalize" }}>Submit</Span>
+        </Button>
+      </ValidatorForm>
+    </div>
         </DialogContent>
 
         <DialogActions>
