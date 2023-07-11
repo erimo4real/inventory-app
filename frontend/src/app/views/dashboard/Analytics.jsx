@@ -7,9 +7,10 @@ import StatCards from './shared/StatCards';
 import StatCards2 from './shared/StatCards2';
 import TopSellingTable from './shared/TopSellingTable';
 import UpgradeCard from './shared/UpgradeCard';
-import SimpleTable from "./../material-kit/tables/SimpleTable";
+import SimpleTable from "./shared/SimpleTable";
 import { } from '@mui/material';
 import { Small } from 'app/components/Typography';
+import { Breadcrumb, SimpleCard } from "app/components";
 
 
 const ContentBox = styled('div')(({ theme }) => ({
@@ -84,7 +85,9 @@ const Analytics = () => {
             {/* <H4>Ongoing Projects</H4>
             <RowCards /> */}
 
-            <SimpleTable/>
+            <SimpleCard title="Simple Table" subtitle="User Table">
+                 <SimpleTable />
+             </SimpleCard>
           </Grid>
 
           <Grid item lg={4} md={4} sm={12} xs={12}>

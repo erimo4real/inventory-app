@@ -178,7 +178,7 @@ const Vendors = () => {
 
             <TextField
               sx={{ mb: 4 }}
-              type="number"
+              type="text"
               name="company"
               label="Company Name"
               onChange={handleChange}
@@ -190,7 +190,7 @@ const Vendors = () => {
 
           <Grid item lg={6} md={6} sm={12} xs={12} sx={{ mt: 2 }}>
             <TextField
-              type="text"
+              type="number"
               name="mobile"
               value={mobile || ""}
               label="Mobile Nubmer"
